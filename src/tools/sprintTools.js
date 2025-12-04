@@ -45,6 +45,41 @@ export const listSprintsTool = {
 };
 
 /**
+ * Tool to get a single sprint's details
+ */
+export const getMilestoneTool = {
+  name: 'getMilestone',
+  schema: {
+    milestoneId: z.string().describe('Milestone (Sprint) ID'),
+  },
+  handler: async ({ milestoneId }) => {
+    try {
+      const milestone = await taigaService.getMilestone(milestoneId);
+
+      const startDate = formatDate(milestone.estimated_start);
+      const endDate = formatDate(milestone.estimated_finish);
+      const status = getStatusLabel(milestone.closed);
+
+      const milestoneDetails = `Sprint Details: ${milestone.name}
+
+- ID: ${milestone.id}
+- Project: ${getSafeValue(milestone.project_extra_info?.name)}
+- Status: ${status}
+- Start Date: ${startDate}
+- End Date: ${endDate}
+- Total Points: ${getSafeValue(milestone.total_points, '0')}
+- User Stories: ${milestone.user_stories.length}
+`;
+
+      return createSuccessResponse(milestoneDetails);
+    } catch (error) {
+      return createErrorResponse(`Failed to get sprint details: ${error.message}`);
+    }
+  }
+};
+
+
+/**
  * Tool to get sprint details and statistics
  */
 export const getSprintStatsTool = {

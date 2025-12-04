@@ -9,7 +9,7 @@ import { listProjectsTool, getProjectTool } from './projectTools.js';
 import { listUserStoriesTool, getUserStoryTool, createUserStoryTool } from './userStoryTools.js';
 import { createTaskTool } from './taskTools.js';
 import { listIssuesTool, getIssueTool, createIssueTool, addIssueToSprintTool, assignIssueTool, updateIssueStatusTool } from './issueTools.js';
-import { listSprintsTool, getSprintStatsTool, createSprintTool, getIssuesBySprintTool } from './sprintTools.js';
+import { listSprintsTool, getSprintStatsTool, createSprintTool, getIssuesBySprintTool, getMilestoneTool } from './sprintTools.js';
 import { batchCreateIssuesTool, batchCreateUserStoriesTool, batchCreateTasksTool } from './batchTools.js';
 import { advancedSearchTool, queryHelpTool, validateQueryTool } from './advancedSearchTools.js';
 import { addCommentTool, listCommentsTool, editCommentTool, deleteCommentTool } from './commentTools.js';
@@ -60,7 +60,8 @@ export const toolRegistry = {
     listSprintsTool,
     getSprintStatsTool,
     createSprintTool,
-    getIssuesBySprintTool
+    getIssuesBySprintTool,
+    getMilestoneTool
   ],
   
   // Batch operation tools
