@@ -198,7 +198,13 @@ For self-hosted Taiga instances:
 📊 Returns: List of sprints with status and dates
 
 🗣️ "Get details for Sprint 5"
-🔍 Returns: Detailed information for Sprint 5
+🔍 Returns: Complete sprint information including:
+   - Basic info (ID, slug, status, order)
+   - Timeline (start/end dates, created/modified dates)
+   - Metrics (total/closed points, user story count)
+   - Team (owner, watchers, available roles)
+   - Description and user stories list
+   - Full JSON data for programmatic access
 
 🗣️ "Get detailed statistics for Sprint 5"
 📈 Returns: Progress stats, completion rates, user stories count
@@ -395,7 +401,7 @@ The system supports two upload methods optimized for different use cases:
 | Tool | Description |
 |------|-------------|
 | `listMilestones` | List all sprints in a project |
-| `getMilestone` | Get detailed sprint information |
+| `getMilestone` | Get complete sprint details including user stories, watchers, owner, timeline, metrics, and full JSON data |
 | `getMilestoneStats` | Get sprint progress and statistics |
 | `createMilestone` | Create new sprints with dates |
 | `getIssuesByMilestone` | View all issues in a sprint |

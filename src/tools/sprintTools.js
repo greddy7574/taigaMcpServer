@@ -45,7 +45,7 @@ export const listSprintsTool = {
 };
 
 /**
- * Tool to get a single sprint's details
+ * Tool to get a single sprint's complete details
  */
 export const getMilestoneTool = {
   name: 'getMilestone',
@@ -60,16 +60,53 @@ export const getMilestoneTool = {
       const endDate = formatDate(milestone.estimated_finish);
       const status = getStatusLabel(milestone.closed);
 
+      // Format user stories list
+      const userStoriesInfo = milestone.user_stories?.length > 0
+        ? milestone.user_stories.map(story => `  • [#${story.ref}] ${story.subject} (${story.status_extra_info?.name || 'No status'})`).join('\n')
+        : '  No user stories assigned';
+
+      // Format watchers list
+      const watchersInfo = milestone.watchers?.length > 0
+        ? milestone.watchers.join(', ')
+        : 'None';
+
       const milestoneDetails = `Sprint Details: ${milestone.name}
 
+📋 Basic Information:
 - ID: ${milestone.id}
+- Slug: ${getSafeValue(milestone.slug, 'N/A')}
 - Project: ${getSafeValue(milestone.project_extra_info?.name)}
+- Project ID: ${milestone.project}
 - Status: ${status}
+- Order: ${getSafeValue(milestone.order, 'N/A')}
+
+📅 Timeline:
 - Start Date: ${startDate}
 - End Date: ${endDate}
+- Created: ${formatDate(milestone.created_date)}
+- Modified: ${formatDate(milestone.modified_date)}
+
+📊 Metrics:
 - Total Points: ${getSafeValue(milestone.total_points, '0')}
-- User Stories: ${milestone.user_stories.length}
-`;
+- Closed Points: ${getSafeValue(milestone.closed_points, '0')}
+- Total User Stories: ${milestone.user_stories?.length || 0}
+
+👥 Team & Access:
+- Owner: ${getSafeValue(milestone.owner_extra_info?.full_name_display, 'N/A')}
+- Watchers: ${watchersInfo}
+- Available Roles: ${milestone.available_roles?.join(', ') || 'None'}
+
+📝 Description:
+${getSafeValue(milestone.description, 'No description provided')}
+
+📚 User Stories (${milestone.user_stories?.length || 0}):
+${userStoriesInfo}
+
+---
+🔗 Permalink: ${milestone.permalink || 'N/A'}
+
+📦 Complete Raw Data (JSON):
+${JSON.stringify(milestone, null, 2)}`;
 
       return createSuccessResponse(milestoneDetails);
     } catch (error) {
