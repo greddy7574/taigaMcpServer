@@ -1,6 +1,6 @@
 {
   "name": "taiga-mcp-server",
-  "version": "1.9.14",
+  "version": "1.9.15",
   "main": "src/index.js",
   "type": "module",
   "bin": {
@@ -13,6 +13,7 @@
     "test:quick": "node test/quickTest.js",
     "test:basic": "node test/mcpTest.js",
     "test:integration": "node test/integration.js",
+    "test:pagination": "node test/paginationTest.js",
     "test:full": "node test/runTests.js"
   },
   "keywords": [

@@ -15,7 +15,8 @@ This file provides comprehensive guidance to Claude Code (claude.ai/code) when w
 - **文件附件管理** - 上传、下载、管理项目文件资源
 - **Epic项目管理** - 大型项目史诗级功能组织和管理
 - **Wiki知识管理** - 完整的项目文档和知识库系统
-- **模块化架构** - 39个MCP工具，12个功能分类
+- **模块化架构** - 43个MCP工具，12个功能分类
+- **完整分页支持** - 所有列表查询自动获取完整数据集（解决Issue #2）
 - **专业测试框架** - 单元测试、集成测试、MCP协议测试、专项功能测试
 - **AI协作开发** - 展示人机协作软件开发潜力
 
@@ -29,13 +30,15 @@ npm run test:unit           # 运行单元测试（无外部依赖）
 npm run test:quick          # 运行快速功能测试
 npm run test:basic          # 运行MCP协议测试（复杂）
 npm run test:integration    # 运行Taiga API集成测试（需凭据）
+npm run test:pagination     # 运行分页功能测试（10个测试，100%通过）
 npm run test:full          # 运行所有测试套件
 node test/batchTest.js     # 运行批次操作专项测试
 node test/advancedQueryTest.js  # 运行高级查询专项测试
 node test/commentTest.js      # 运行评论系统专项测试
 node test/attachmentTest.js   # 运行文件附件专项测试
-node test/base64UploadTest.js # 运行Base64文件上传专项测试 (新增)
+node test/base64UploadTest.js # 运行Base64文件上传专项测试
 node test/epicTest.js         # 运行Epic管理专项测试
+node test/getUserStoryTest.js # 运行User Story单个查询测试（Issue #2 part 2）
 ```
 
 ### 包管理与发布
@@ -198,8 +201,9 @@ src/
 - `getIssue` - 问题详情（包括Sprint分配）
 - `createIssue` - 创建问题（支持状态、优先级等）
 
-#### 📝 用户故事管理 (2个)
-- `listUserStories` - 列出项目用户故事
+#### 📝 用户故事管理 (3个)
+- `listUserStories` - 列出项目用户故事（支持完整分页）
+- `getUserStory` - 获取单个用户故事详情（新增，Issue #2）
 - `createUserStory` - 创建用户故事
 
 #### ✅ 任务管理 (1个)
@@ -364,6 +368,7 @@ git push origin main --tags    # 推送触发CI/CD
 - **v1.6.1**: 高级查询语法系统
 - **v1.7.0**: 评论系统协作增强
 - **v1.9.8**: Base64文件上传架构重构，解决MCP协议文件处理限制
+- **v1.9.15**: 🎯 完整分页支持 - 修复Issue #2，所有列表操作支持多页数据获取
 
 ### AI协作开发特色
 这个项目展示了人机协作开发的强大潜力：

@@ -4,11 +4,12 @@
 
 import { z } from 'zod';
 import { TaigaService } from '../taigaService.js';
-import { RESPONSE_TEMPLATES, SUCCESS_MESSAGES } from '../constants.js';
-import { 
+import { RESPONSE_TEMPLATES, SUCCESS_MESSAGES, STATUS_LABELS } from '../constants.js';
+import {
   resolveProjectId,
   findIdByName,
   formatUserStoryList,
+  formatDateTime,
   getSafeValue,
   createErrorResponse,
   createSuccessResponse
@@ -37,6 +38,45 @@ export const listUserStoriesTool = {
       return createSuccessResponse(userStoriesText);
     } catch (error) {
       return createErrorResponse(`Failed to list user stories: ${error.message}`);
+    }
+  }
+};
+
+/**
+ * Tool to get single user story details
+ */
+export const getUserStoryTool = {
+  name: 'getUserStory',
+  schema: {
+    userStoryId: z.string().describe('User Story ID'),
+  },
+  handler: async ({ userStoryId }) => {
+    try {
+      const userStory = await taigaService.getUserStory(userStoryId);
+
+      const storyDetails = `User Story Details: #${userStory.ref} - ${userStory.subject}
+
+📋 Basic Information:
+- Project: ${getSafeValue(userStory.project_extra_info?.name)}
+- Status: ${getSafeValue(userStory.status_extra_info?.name)}
+- Epic: ${getSafeValue(userStory.epic_extra_info?.subject, 'No Epic')}
+
+🎯 Assignment:
+- Assigned to: ${getSafeValue(userStory.assigned_to_extra_info?.full_name, 'Unassigned')}
+- Sprint: ${getSafeValue(userStory.milestone_extra_info?.name, 'No Sprint')}
+
+📊 Metrics:
+- Points: ${getSafeValue(userStory.total_points, '0')}
+- Tasks: ${userStory.tasks?.length || 0}
+
+📝 Description:
+${getSafeValue(userStory.description, 'No description')}
+
+🏷️ Tags: ${getSafeValue(userStory.tags?.join(', '), 'No tags')}`;
+
+      return createSuccessResponse(storyDetails);
+    } catch (error) {
+      return createErrorResponse(`Failed to get user story details: ${error.message}`);
     }
   }
 };
