@@ -197,7 +197,7 @@ For self-hosted Taiga instances:
 🗣️ "Show me all sprints in project MyApp"
 📊 Returns: List of sprints with status and dates
 
-🗣️ "Get detailed statistics for Sprint 5"  
+🗣️ "Get details for Sprint 5"
 📈 Returns: Progress stats, completion rates, user stories count
 
 🗣️ "Create a new sprint called 'Q1 Release' from 2024-01-01 to 2024-03-31"
@@ -386,7 +386,7 @@ The system supports two upload methods optimized for different use cases:
 | Tool | Description |
 |------|-------------|
 | `listMilestones` | List all sprints in a project |
-| `getMilestoneStats` | Get sprint progress and statistics |
+| `getMilestoneStats` | Get detailed sprint information |
 | `createMilestone` | Create new sprints with dates |
 | `getIssuesByMilestone` | View all issues in a sprint |
 
