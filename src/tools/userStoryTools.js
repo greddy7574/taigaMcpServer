@@ -128,3 +128,31 @@ Project: ${getSafeValue(createdStory.project_extra_info?.name)}`;
     }
   }
 };
+
+/**
+ * Tool to assign a user story to a sprint
+ */
+export const assignUserStoryToSprintTool = {
+  name: 'assignUserStoryToSprint',
+  schema: {
+    userStoryId: z.string().describe('User Story ID'),
+    milestoneId: z.string().optional().describe('Milestone (Sprint) ID. Set to null or omit to unassign from sprint.'),
+  },
+  handler: async ({ userStoryId, milestoneId }) => {
+    try {
+      const updateData = {
+        milestone: milestoneId === 'null' || !milestoneId ? null : parseInt(milestoneId),
+      };
+
+      const updatedStory = await taigaService.updateUserStory(userStoryId, updateData);
+
+      const status = updatedStory.milestone ? 
+        `User story #${updatedStory.ref} assigned to sprint ${updatedStory.milestone_extra_info?.name}` :
+        `User story #${updatedStory.ref} unassigned from sprint`;
+
+      return createSuccessResponse(status);
+    } catch (error) {
+      return createErrorResponse(`Failed to assign user story to sprint: ${error.message}`);
+    }
+  }
+};

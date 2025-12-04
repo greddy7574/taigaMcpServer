@@ -242,6 +242,12 @@ For self-hosted Taiga instances:
 🗣️ "Show me user story #456 details"
 🔍 Returns: Complete user story info including project, status, and points
 
+🗣️ "Assign user story 456 to sprint 101"
+🏃 Returns: User story assigned to sprint with confirmation
+
+🗣️ "Unassign user story 456 from sprint"
+🏃 Returns: User story removed from sprint assignment
+
 🗣️ "Create these 5 issues in batch: Bug1, Bug2, Feature1, Task1, Task2"
 🚀 Returns: Batch creation results with individual success/failure status
 ```
@@ -404,12 +410,13 @@ The system supports two upload methods optimized for different use cases:
 | `addIssueToSprint` | Assign issues to sprints or remove from sprints |
 | `assignIssue` | Assign issues to team members or unassign |
 
-### 📝 User Story Management (3 tools)
+### 📝 User Story Management (4 tools)
 | Tool | Description |
 |------|-------------|
 | `listUserStories` | View user stories in a project |
 | `getUserStory` | Get detailed user story information |
 | `createUserStory` | Create new user stories |
+| `assignUserStoryToSprint` | Assign a user story to a sprint or unassign it |
 
 ### ✅ Task Management (1 tool)
 | Tool | Description |

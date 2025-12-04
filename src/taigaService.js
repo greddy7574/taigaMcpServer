@@ -148,6 +148,31 @@ export class TaigaService {
   }
 
   /**
+   * Update a user story
+   * @param {number} userStoryId - User Story ID
+   * @param {Object} updateData - Data to update
+   * @returns {Promise<Object>} - Updated user story
+   */
+  async updateUserStory(userStoryId, updateData) {
+    try {
+      const client = await createAuthenticatedClient();
+      
+      // Get current user story to get version for update
+      const currentUserStory = await this.getUserStory(userStoryId);
+      const dataWithVersion = {
+        ...updateData,
+        version: currentUserStory.version
+      };
+
+      const response = await client.patch(`${API_ENDPOINTS.USER_STORIES}/${userStoryId}`, dataWithVersion);
+      return response.data;
+    } catch (error) {
+      console.error('Failed to update user story:', error.message);
+      throw new Error('Failed to update user story in Taiga');
+    }
+  }
+
+  /**
    * Get user story statuses for a project
    * @param {string} projectId - Project ID
    * @returns {Promise<Array>} - List of user story statuses
