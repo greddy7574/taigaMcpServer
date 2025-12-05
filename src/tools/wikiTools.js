@@ -17,12 +17,12 @@ const taigaService = new TaigaService();
 export const createWikiPageTool = {
   name: 'createWikiPage',
   description: 'Create a new Wiki page in a project for documentation and knowledge sharing',
-  inputSchema: z.object({
+  schema: {
     project: z.union([z.number(), z.string()]).describe('Project ID, slug, or name'),
-    slug: z.string().min(1, 'Wiki page slug is required').describe('URL-friendly identifier for the Wiki page'),
-    content: z.string().min(1, 'Wiki page content is required').describe('Content of the Wiki page (supports Markdown)'),
+    slug: z.string().min(1).describe('URL-friendly identifier for the Wiki page (required)'),
+    content: z.string().min(1).describe('Content of the Wiki page - supports Markdown (required)'),
     watchers: z.array(z.number()).optional().describe('Optional list of user IDs to watch this Wiki page'),
-  }),
+  },
   
   handler: async ({ project, slug, content, watchers }) => {
     try {
@@ -69,9 +69,9 @@ export const createWikiPageTool = {
 export const listWikiPagesTool = {
   name: 'listWikiPages',
   description: 'List all Wiki pages in a project',
-  inputSchema: z.object({
+  schema: {
     project: z.union([z.number(), z.string()]).describe('Project ID, slug, or name'),
-  }),
+  },
   
   handler: async ({ project }) => {
     try {
@@ -120,10 +120,10 @@ export const listWikiPagesTool = {
 export const getWikiPageTool = {
   name: 'getWikiPage',
   description: 'Get detailed information about a specific Wiki page by ID or slug',
-  inputSchema: z.object({
+  schema: {
     project: z.union([z.number(), z.string()]).describe('Project ID, slug, or name'),
     identifier: z.union([z.number(), z.string()]).describe('Wiki page ID (number) or slug (string)'),
-  }),
+  },
   
   handler: async ({ project, identifier }) => {
     try {
@@ -175,12 +175,12 @@ export const getWikiPageTool = {
 export const updateWikiPageTool = {
   name: 'updateWikiPage',
   description: 'Update content and settings of an existing Wiki page',
-  inputSchema: z.object({
+  schema: {
     project: z.union([z.number(), z.string()]).describe('Project ID, slug, or name'),
     identifier: z.union([z.number(), z.string()]).describe('Wiki page ID (number) or slug (string)'),
     content: z.string().optional().describe('New content for the Wiki page (supports Markdown)'),
     watchers: z.array(z.number()).optional().describe('Updated list of user IDs to watch this Wiki page'),
-  }),
+  },
   
   handler: async ({ project, identifier, content, watchers }) => {
     try {
@@ -235,10 +235,10 @@ export const updateWikiPageTool = {
 export const deleteWikiPageTool = {
   name: 'deleteWikiPage',
   description: 'Delete a Wiki page from the project (irreversible action)',
-  inputSchema: z.object({
+  schema: {
     project: z.union([z.number(), z.string()]).describe('Project ID, slug, or name'),
     identifier: z.union([z.number(), z.string()]).describe('Wiki page ID (number) or slug (string)'),
-  }),
+  },
   
   handler: async ({ project, identifier }) => {
     try {
@@ -289,11 +289,11 @@ export const deleteWikiPageTool = {
 export const watchWikiPageTool = {
   name: 'watchWikiPage',
   description: 'Watch or unwatch a Wiki page to receive notifications about changes',
-  inputSchema: z.object({
+  schema: {
     project: z.union([z.number(), z.string()]).describe('Project ID, slug, or name'),
     identifier: z.union([z.number(), z.string()]).describe('Wiki page ID (number) or slug (string)'),
     watch: z.boolean().default(true).describe('True to watch, false to unwatch the Wiki page'),
-  }),
+  },
   
   handler: async ({ project, identifier, watch }) => {
     try {

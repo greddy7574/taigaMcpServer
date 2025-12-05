@@ -17,15 +17,13 @@ const taigaService = new TaigaService();
 export const createEpicTool = {
   name: 'createEpic',
   description: 'Create a new Epic for organizing large-scale project features',
-  inputSchema: z.object({
-    project: z.number({
-      description: 'Project ID where the Epic will be created'
-    }),
-    subject: z.string().min(1, 'Epic subject is required'),
+  schema: {
+    project: z.number().describe('Project ID where the Epic will be created'),
+    subject: z.string().min(1).describe('Epic subject is required'),
     description: z.string().optional().describe('Optional detailed description of the Epic'),
     color: z.string().optional().describe('Optional color code for the Epic (e.g., #FF5733)'),
     tags: z.array(z.string()).optional().describe('Optional tags for categorization'),
-  }),
+  },
   
   handler: async ({ project, subject, description, color, tags }) => {
     try {
@@ -68,11 +66,9 @@ export const createEpicTool = {
 export const listEpicsTool = {
   name: 'listEpics',
   description: 'List all Epics in a project',
-  inputSchema: z.object({
-    project: z.number({
-      description: 'Project ID to list Epics from'
-    })
-  }),
+  schema: {
+    project: z.number().describe('Project ID to list Epics from')
+  },
   
   handler: async ({ project }) => {
     try {
@@ -123,11 +119,9 @@ export const listEpicsTool = {
 export const getEpicTool = {
   name: 'getEpic',
   description: 'Get detailed information about a specific Epic',
-  inputSchema: z.object({
-    epicId: z.number({
-      description: 'ID of the Epic to get details for'
-    })
-  }),
+  schema: {
+    epicId: z.number().describe('ID of the Epic to get details for')
+  },
   
   handler: async ({ epicId }) => {
     try {
@@ -178,16 +172,14 @@ export const getEpicTool = {
 export const updateEpicTool = {
   name: 'updateEpic',
   description: 'Update an existing Epic\'s information',
-  inputSchema: z.object({
-    epicId: z.number({
-      description: 'ID of the Epic to update'
-    }),
+  schema: {
+    epicId: z.number().describe('ID of the Epic to update'),
     subject: z.string().optional().describe('New subject/title for the Epic'),
     description: z.string().optional().describe('New description for the Epic'),
     color: z.string().optional().describe('New color code for the Epic'),
     tags: z.array(z.string()).optional().describe('New tags for the Epic'),
     status: z.number().optional().describe('New status ID for the Epic')
-  }),
+  },
   
   handler: async ({ epicId, subject, description, color, tags, status }) => {
     try {
@@ -230,14 +222,10 @@ export const updateEpicTool = {
 export const linkStoryToEpicTool = {
   name: 'linkStoryToEpic',
   description: 'Link a User Story to an Epic for better organization',
-  inputSchema: z.object({
-    userStoryId: z.number({
-      description: 'ID of the User Story to link'
-    }),
-    epicId: z.number({
-      description: 'ID of the Epic to link the story to'
-    })
-  }),
+  schema: {
+    userStoryId: z.number().describe('ID of the User Story to link'),
+    epicId: z.number().describe('ID of the Epic to link the story to')
+  },
   
   handler: async ({ userStoryId, epicId }) => {
     try {
@@ -272,11 +260,9 @@ export const linkStoryToEpicTool = {
 export const unlinkStoryFromEpicTool = {
   name: 'unlinkStoryFromEpic',
   description: 'Remove the link between a User Story and Epic',
-  inputSchema: z.object({
-    userStoryId: z.number({
-      description: 'ID of the User Story to unlink'
-    })
-  }),
+  schema: {
+    userStoryId: z.number().describe('ID of the User Story to unlink')
+  },
   
   handler: async ({ userStoryId }) => {
     try {
