@@ -146,13 +146,60 @@ export const assignUserStoryToSprintTool = {
 
       const updatedStory = await taigaService.updateUserStory(userStoryId, updateData);
 
-      const status = updatedStory.milestone ? 
+      const status = updatedStory.milestone ?
         `User story #${updatedStory.ref} assigned to sprint ${updatedStory.milestone_extra_info?.name}` :
         `User story #${updatedStory.ref} unassigned from sprint`;
 
       return createSuccessResponse(status);
     } catch (error) {
       return createErrorResponse(`Failed to assign user story to sprint: ${error.message}`);
+    }
+  }
+};
+
+/**
+ * Tool to update the status of a user story
+ * Mirrors updateIssueStatus functionality for user stories
+ */
+export const updateUserStoryStatusTool = {
+  name: 'updateUserStoryStatus',
+  schema: {
+    userStoryId: z.string().describe('User Story ID or reference number'),
+    status: z.string().describe('Name of the target status (e.g., "New", "Ready", "In Progress", "Done")'),
+    projectIdentifier: z.string().optional().describe('Project ID or slug (required if using reference number)'),
+  },
+  handler: async ({ userStoryId, status, projectIdentifier }) => {
+    try {
+      // Get the user story first to determine project
+      const userStory = await taigaService.getUserStory(userStoryId);
+      const projectId = userStory.project;
+
+      // Get available statuses for this project
+      const statuses = await taigaService.getUserStoryStatuses(projectId);
+      const statusId = findIdByName(statuses, status);
+
+      if (!statusId) {
+        const availableStatuses = statuses.map(s => `- ${s.name} (ID: ${s.id})`).join('\n');
+        return createErrorResponse(
+          `Invalid status name: "${status}". Available statuses for project "${userStory.project_extra_info?.name}":\n${availableStatuses}`
+        );
+      }
+
+      // Update the user story status
+      const updatedStory = await taigaService.updateUserStory(userStoryId, { status: statusId });
+
+      const successMessage = `Successfully updated status for user story #${updatedStory.ref} to "${updatedStory.status_extra_info?.name}".
+
+User Story Details:
+- Subject: ${updatedStory.subject}
+- Project: ${getSafeValue(updatedStory.project_extra_info?.name)}
+- New Status: ${getSafeValue(updatedStory.status_extra_info?.name)}
+- Assigned to: ${getSafeValue(updatedStory.assigned_to_extra_info?.full_name, 'Unassigned')}
+- Sprint: ${getSafeValue(updatedStory.milestone_extra_info?.name, 'No Sprint')}`;
+
+      return createSuccessResponse(successMessage);
+    } catch (error) {
+      return createErrorResponse(`Failed to update user story status: ${error.message}`);
     }
   }
 };
