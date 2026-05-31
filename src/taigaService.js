@@ -1128,14 +1128,9 @@ export class TaigaService {
     try {
       const client = await createAuthenticatedClient();
       
-      // Get current User Story to get version for update
-      const currentStory = await client.get(`${API_ENDPOINTS.USER_STORIES}/${userStoryId}`);
-      const updateData = {
-        epic: epicId,
-        version: currentStory.data.version
-      };
-      
-      const response = await client.patch(`${API_ENDPOINTS.USER_STORIES}/${userStoryId}`, updateData);
+      const response = await client.post(`${API_ENDPOINTS.EPICS}/${epicId}/related_userstories`, {
+        user_story: userStoryId
+      });
       return response.data;
     } catch (error) {
       console.error('Failed to link story to epic:', error.message);
